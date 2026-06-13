@@ -1,0 +1,7 @@
+{
+  "渠道类型": "OpenAI 兼容",
+  "Base URL": "http://127.0.0.1:8070",
+  "模型名称": "gemma-12b 或 gpt-20b",
+  "密钥": "如果llama.cpp设置了--api-key就填，否则留空",
+  "备注": "如果你用Docker运行One API，Base URL请改成 http://host.docker.internal:8070"
+}
