@@ -154,6 +154,7 @@ WHERE p.user_id = :target_user_id;
 进入房间检查：
 
 |灯泡状态	| 对应开关|
+|------|------|
 |亮着 | B|
 |热但熄灭	| A|
 |冷且熄灭	| C|
@@ -166,6 +167,7 @@ WHERE p.user_id = :target_user_id;
 **回答：**
 
 |语言	| 翻译版本	| 风格说明|
+|------|------|------|
 |法语	| « La simplicité est la sophistication ultime. – Léonard de Vinci »	| “simplicité” 为常见对应词；“ultime” 倒装保持韵律；署名按法语传统。|
 西班牙语	| « La simplicidad es la máxima sofisticación. – Leonardo da Vinci »	| “máxima” 强调极致；“sofisticación” 更诗性；署名保留原拼写以显学术。|
 德语	| « Die Einfachheit ist die ultimative Raffinesse. – Leonardo da Vinci »	| “Einfachheit” 贴合哲学内涵；“ultimative” 增添文学色彩；署名保留原样。|
