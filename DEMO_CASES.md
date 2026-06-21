@@ -171,6 +171,7 @@ WHERE p.user_id = :target_user_id;
 |法语	| « La simplicité est la sophistication ultime. – Léonard de Vinci »	| “simplicité” 为常见对应词；“ultime” 倒装保持韵律；署名按法语传统。|
 西班牙语	| « La simplicidad es la máxima sofisticación. – Leonardo da Vinci »	| “máxima” 强调极致；“sofisticación” 更诗性；署名保留原拼写以显学术。|
 德语	| « Die Einfachheit ist die ultimative Raffinesse. – Leonardo da Vinci »	| “Einfachheit” 贴合哲学内涵；“ultimative” 增添文学色彩；署名保留原样。|
+
 细节讨论：
 
 原文拼写错误（simplicity）在译文中均使用正确拼写，避免将错误带入目标语言。
@@ -332,4 +333,57 @@ FROM subordinates;
 - 只要把起始条件改成 `WHERE manager_id = :emp_id`（或 `START WITH id = :emp_id`）即可得到所有下属。  
 
 你可以直接把上述代码粘到对应数据库里，替换 `:emp_id` 为想查询的员工 id，即可获得该员工的全部子级（包括间接）。祝编码愉快 
+
+## 案例 10：短问答 — WebAssembly
+
+**问题：**
+什么是WebAssembly？它如何提升Web应用性能？...
+
+**回答：**
+
+WebAssembly（简称 Wasm）是什么？
+
+定义：WebAssembly 是一种低级、可移植的二进制指令格式，专门为 Web 浏览器设计。它描述了一套可以在浏览器中执行的虚拟机指令，并提供了一个与 JavaScript 互操作的 API（`WebAssembly.instantiate()` 等）。  
+目标：让开发者能够把用 C/C++/Rust/Ruby/Go 等语言写好的代码编译成 WebAssembly 模块，然后在浏览器里直接运行，而不必先转成 JavaScript。  
+特性：
+二进制格式（`.wasm`）比文本形式的 JavaScript 更小、更易压缩，加载速度更快。
+类型化内存：所有数据都是明确定义的整数/浮点数，浏览器 JIT 可以直接映射到机器码，而不需要动态类型检查。
+沙箱安全：与 JS 一样，只能访问其自身内存、模块导出的函数和 Web API，不可随意读写全局域。
+
+它如何提升 Web 应用性能？
+
+| 维度 | 传统 JavaScript 的瓶颈 | WebAssembly 的优势 |
+|------|------------------------|--------------------|
+| **启动/解析** | JS 需要文本解析、语法分析和即时编译（JIT） | `.wasm` 是二进制，浏览器只需解码并直接 JIT 编译，省掉了解析时间。 |
+| **执行速度** | 解释型 + 动态类型检查 → 每条指令多一次类型判断、GC 调用等 | 纯机器码级别的指令，JIT 能生成近乎原生机代码；无类型检查开销。 |
+| **内存访问** | JS 的 `ArrayBuffer`/`TypedArray` 需要间接层 | Wasm 拥有直接地址空间（如 C/C++），可以一次性地读写大量数据，减少指令数。 |
+| **并行** | 单线程 + event‑loop 约束 | 支持 Web Workers + `SharedArrayBuffer` + SIMD 指令，可在多核上真正并行。 |
+| **代码复用** | 只能用 JS 写；C/C++ 库需要重写或使用 Emscripten 等工具 | 现有的大量 C/C++/Rust 代码可以直接编译成 `.wasm`，无需改动原始代码。 |
+
+具体性能提升的表现
+
+1. 更快的计算密集任务
+   - 视频解码、图像处理、物理模拟、机器学习推断等数值运算在 Wasm 中可达到接近原生 C/C++ 的速度，JS 需要多层包装（TypedArray → JS 数组）才能实现同样功能。
+
+2. 更小的包体  
+   - `.wasm` 文件通常比相同功能的 JS 脚小 30%~70%，减轻了网络传输与缓存命中率，提升首次加载体验。
+
+3. 更好的 CPU 利用  
+   - Wasm 的 JIT 可以直接使用 SIMD、WebAssembly Threads 等硬件指令，而 JavaScript 引擎往往在同一层面上无法做到。  
+
+4. 可预编译（Wasm-Precompile）  
+   - 服务器可以把 `.wasm` 编译成目标机器码（如 `*.wast` → `*.o`），浏览器直接加载已 JIT 的字节码，进一步减少启动延迟。
+
+
+典型使用场景
+
+| 场景 | 传统做法 | Wasm + JS 做法 |
+|------|----------|----------------|
+| **游戏** | 用 JS 写逻辑、Canvas 渲染；性能瓶颈在物理/渲染循环 | C/C++/Rust 编译成 `.wasm`，核心循环直接跑在浏览器，JS 负责 UI 与事件。 |
+| **音视频** | 用 JS 实现解码、滤镜 | 用 FFmpeg 等 C 库编译成 Wasm，几乎无延迟的实时处理。 |
+| **科学计算** | 用 JS + Math.js / numeric.js | 用 Rust/C++ 编译成 Wasm，利用 SIMD 与多线程实现高性能矩阵运算。 |
+
+ 结语
+
+WebAssembly 并不是要取代 JavaScript，而是为 Web 提供一种“近原生、可移植”的执行层。它让浏览器能直接跑已存在的 C/C++/Rust 等语言代码，减少了文本解析与 JIT 的开销，并利用硬件 SIMD 与多线程等特性，使得 Web 应用在性能上有显著提升——尤其是对计算密集、图形渲染或大规模数据处理需求强烈的场景。随着浏览器生态不断完善（SIMD、Threads、Wasm-Precompile 等），WebAssembly 正在逐步成为现代 Web 开发不可或缺的技术之一。
 
