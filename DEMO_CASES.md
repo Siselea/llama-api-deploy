@@ -134,7 +134,7 @@ FROM posts p
 WHERE p.user_id = :target_user_id;
 ```
 
-3. 性能建议
+**3. 性能建议**
 
 高并发点赞：业务层使用乐观锁 + 事务，或利用唯一索引插入。
 
@@ -181,11 +181,11 @@ WHERE p.user_id = :target_user_id;
 
 细节讨论：
 
-原文拼写错误（simplicity）在译文中均使用正确拼写，避免将错误带入目标语言。
+- 原文拼写错误（simplicity）在译文中均使用正确拼写，避免将错误带入目标语言。
 
-作者署名处理上，法语、西班牙语采用当地传统，德语保留原始拼写以保证学术连贯性。
+- 作者署名处理上，法语、西班牙语采用当地传统，德语保留原始拼写以保证学术连贯性。
 
-所有翻译均保持“X是Y”的对称结构，兼顾哲学意味与各语言文化习惯。
+- 所有翻译均保持“X是Y”的对称结构，兼顾哲学意味与各语言文化习惯。
 
 ---
 
@@ -200,7 +200,8 @@ WHERE p.user_id = :target_user_id;
 同理 q 也能被3整除，与 p,q 互质矛盾。故 √3 是无理数。
 
 推广到任意非完全平方数
-结论：对整数 n > 1，若 n 不是完全平方数，则 √n 是无理数。
+结论：
+对整数 n > 1，若 n 不是完全平方数，则 √n 是无理数。
 
 质因子分解法：若 √n = p/q（最简），则 n q² = p²。左边每个质因子的指数为 e_i + 偶数，右边全为偶数。若某 e_i 为奇数则矛盾，故所有 e_i 必为偶数，即 n 为完全平方。逆否命题即得证。
 
@@ -225,8 +226,8 @@ WHERE p.user_id = :target_user_id;
 共享+智能化生态：云平台实现多车型协同运营与无感充电。
 
 两大潜在挑战：
-① 供应链与稀有资源瓶颈——锂、钴等价格波动，产能受限；
-② 标准化与互操作性缺失——充电接口、软件协议不统一，影响用户体验。
+- ① 供应链与稀有资源瓶颈——锂、钴等价格波动，产能受限；
+- ② 标准化与互操作性缺失——充电接口、软件协议不统一，影响用户体验。
 
 总体来看，新能源汽车正向多维度生态系统转型，固态电池与车网协同是突破关键，而供应链韧性与标准化需同步提升。
 
@@ -249,7 +250,7 @@ WHERE p.user_id = :target_user_id;
  );
  ```
 
-1. MySQL 8+ / PostgreSQL / SQL Server（递归 CTE）
+ **[1. MySQL 8+ / PostgreSQL / SQL Server（递归 CTE）]**
 
 ```sql
 传入要查询的上级员工 id，例如 :emp_id = 5
@@ -275,7 +276,7 @@ FROM subordinates;
  递归 CTE 会把所有层级的下属一次性拉出来。  
  如果你还想把根节点本身也包含进来，只需把起始行改成 `WHERE id = :emp_id`，再在后面加上 `UNION ALL SELECT ... FROM employee WHERE manager_id = s.id` 即可。
 
- 2. Oracle（CONNECT BY）
+ **[2. Oracle（CONNECT BY）]**
 
 ```sql
 -- 传入要查询的上级员工 id，例如 :emp_id = 5
@@ -290,7 +291,7 @@ CONNECT BY PRIOR manager_id = id; -- 子行的 manager_id 等于父行的 id
 这条语句会返回根节点本身以及所有后代（直接、间接）下属。  
 
 
- 3. 如果你想得到层级深度或路径
+ **3. 如果你想得到层级深度或路径**
 
 ```sql
 -- MySQL/PostgreSQL/SQL Server 示例
@@ -315,7 +316,7 @@ FROM subordinates;
  `path` 给出完整路径，方便调试。
 
 
- 4. 防止循环引用
+ **4. 防止循环引用**
 
 如果业务中可能出现 环形（A 的 manager_id 指向 B，而 B 又指向 A），递归查询会死循环。可以在 CTE 中加上已访问集合：
 
@@ -358,8 +359,11 @@ FROM subordinates;
 
 WebAssembly（简称 Wasm）是什么？
 
-定义：WebAssembly 是一种低级、可移植的二进制指令格式，专门为 Web 浏览器设计。它描述了一套可以在浏览器中执行的虚拟机指令，并提供了一个与 JavaScript 互操作的 API（`WebAssembly.instantiate()` 等）。  
-目标：让开发者能够把用 C/C++/Rust/Ruby/Go 等语言写好的代码编译成 WebAssembly 模块，然后在浏览器里直接运行，而不必先转成 JavaScript。  
+定义：
+WebAssembly 是一种低级、可移植的二进制指令格式，专门为 Web 浏览器设计。
+它描述了一套可以在浏览器中执行的虚拟机指令，并提供了一个与 JavaScript 互操作的 API（`WebAssembly.instantiate()` 等）。  
+目标：
+让开发者能够把用 C/C++/Rust/Ruby/Go 等语言写好的代码编译成 WebAssembly 模块，然后在浏览器里直接运行，而不必先转成 JavaScript。  
 特性：
 二进制格式（`.wasm`）比文本形式的 JavaScript 更小、更易压缩，加载速度更快。
 类型化内存：所有数据都是明确定义的整数/浮点数，浏览器 JIT 可以直接映射到机器码，而不需要动态类型检查。
