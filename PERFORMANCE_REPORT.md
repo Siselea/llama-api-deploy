@@ -46,5 +46,5 @@
 
 ## 相关链接
 - 部署源码：https://github.com/Siselea/llama-api-deploy
-- 压力测试脚本：见仓库内 `stress_test_v11_final.ps1`(stress_test_v11_final.ps1)
+- 压力测试脚本：见仓库内 `stress_test_v11_final.ps1`
 - 7月5日公测：届时将提供免费体验 Key，欢迎关注。
