@@ -108,7 +108,7 @@ CREATE TABLE post_likes (
     INDEX idx_post_likes_user (user_id),
     INDEX idx_post_likes_post (post_id)
 );
-]
+
 **2. 查询某个用户所有帖子的被点赞总数**
 
 **方案 A：直接统计（推荐）**
