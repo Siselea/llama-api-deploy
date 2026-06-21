@@ -81,7 +81,7 @@ Japanese (localized)
 | post_likes | (post_id, user_id) | 点赞记录（复合主键防重复点赞） |
 
 建表语句：
-[```sql
+```sql
 -- users 表
 CREATE TABLE users (
     user_id      BIGINT PRIMARY KEY,
@@ -108,7 +108,7 @@ CREATE TABLE post_likes (
     INDEX idx_post_likes_user (user_id),
     INDEX idx_post_likes_post (post_id)
 );
-
+```
 **2. 查询某个用户所有帖子的被点赞总数**
 
 **方案 A：直接统计（推荐）**
